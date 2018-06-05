@@ -29,13 +29,15 @@ maxAtOnce = 1024  # max nbr of messages that are processed within one batch
 
 # App logic global variables
 outfile = "" # "define" global var that the app code needs
+bufsize = 1  # prevents python to bufferize the output. 1 means "line buffered" (0 means unbuffered but exits with error).
 
 def onInit():
 	""" Do everything that is needed to initialize processing (e.g.
 	    open files, create handles, connect to systems...)
 	"""
 	global outfile
-	outfile = open("/tmp/logfile", "w")
+        global bufsize
+	outfile = open("/tmp/logfile", "w", bufsize)
 
 
 def onReceive(msgs):
@@ -90,5 +92,4 @@ while keepRunning == 1:
 				break;
 		if len(msgs) > 0:
 			onReceive(msgs)
-			sys.stdout.flush() # very important, Python buffers far too much!
 onExit()
